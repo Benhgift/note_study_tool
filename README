@@ -1,0 +1,12 @@
+Pass in notes and it'll store them. Then you can:
+    - retrieve a note for study
+    - build a notes file from all of them
+
+Which notes should we study?
+    - the note with the highest importance.
+        imporance = time_since_review * imporance_scale 
+            importance_scale changes with user saying note was easy
+
+    - parent notes first
+        - when we study a note, reset its age to 0
+            - increase importance of child notes

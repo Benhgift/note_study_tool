@@ -3,6 +3,7 @@ Make a note file that looks like the example. There's an "id" section, a "parent
 
 Then call `python main.py -n your_notefile.note`, and then `python main.py -m` to view all notes in the database.
 
+#Description:
 This program is the backend for note management. You can tag notes heirarchically and they'll stay under their parent notes.
 
 Next is to support spaced repitition study.

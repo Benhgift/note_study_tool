@@ -16,7 +16,7 @@ def get_args():
     parser.add_argument('-t', '--note_text', help='A new note')
     parser.add_argument('-m', '--make_all_text', help='Make the notes file with all notes in it', action='store_true')
     parser.add_argument('-s', '--study_one', action='store_true', help='Gives a note for review and marks it')
-    parser.add_argument('-r','--remove', help='Remove a note or section')
+    parser.add_argument('-u','--update', help='Pass in the note to update')
 
     args = parser.parse_args()
     return args
@@ -52,6 +52,8 @@ def do_args(args):
             print notebook.get_next_review_note()
         if args.delete:
             notebook.delete_note(args.delete)
+        if args.update:
+            notebook.update_note(_get_file_text(args.update))
         if args.make_all_text:
             y = notebook.build_all_notes_text()
             for x in notebook.build_all_notes_text():
@@ -98,6 +100,8 @@ def check_args(args):
             _check_note_text(args.note_text, notebook)
         if args.delete:
             _check_valid_parents({args.delete:0}, notebook.note_table)
+        if args.update:
+            _check_note(args.update, notebook)
 
 def main():
     args = get_args()

@@ -117,12 +117,12 @@ class Notebook():
 
     @staticmethod
     def _clean_id(raw_id_text):
-        id = [int(raw_id_text.strip())]
+        id = int(raw_id_text.strip())
         return id
     @staticmethod
     def _find_id_raw(raw_note_text):
         for cur, line in enumerate(raw_note_text):
-            if re.match(r'^id:\s*$', line)
+            if re.match(r'^id:\s*$', line):
                 id_line = raw_note_text[cur+1]
                 return id_line
     def _get_note_id(self, raw_note_text):
@@ -130,10 +130,10 @@ class Notebook():
         clean_note_id = self._clean_id(raw_id_text) 
         return clean_note_id
     def update_note(self, raw_note_text):
-        note_id = self._get_note_id(raw_id_text)
-        note = self.note_table[note_id]
+        note_id = self._get_note_id(raw_note_text)
+        updated_note = self._make_note(raw_note_text)
         self.delete_note(note_id)
-        self._add_note_to_self(note)
+        self._add_note_to_self(updated_note)
 
     def _get_next_review_note(self):
         note = self.top_level_note.get_note_to_study()

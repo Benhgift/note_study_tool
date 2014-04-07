@@ -9,11 +9,13 @@ This program is the backend for note management. You can tag notes heirarchicall
 Next is to support spaced repitition study.
 
 Pass in notes and it'll store them. Then you can:
+
     - retrieve a note for study (not implimented)
     - build a notes file from all of them
     - add/remove/update
 
 Which notes should we study?
+
     - the note with the highest importance.
         imporance = time_since_review * imporance_scale 
             importance_scale changes with user saying note was easy

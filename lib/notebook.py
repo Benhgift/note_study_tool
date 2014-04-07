@@ -131,8 +131,9 @@ class Notebook():
         return clean_note_id
     def update_note(self, raw_note_text):
         note_id = self._get_note_id(raw_note_text)
-        updated_note = self._make_note(raw_note_text)
         self.delete_note(note_id)
+        updated_note = self._make_note(raw_note_text)
+        updated_note.db_id = note_id
         self._add_note_to_self(updated_note)
 
     def _get_next_review_note(self):

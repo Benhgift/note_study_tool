@@ -3,6 +3,7 @@
 '''
 
 import argparse as argy
+import os
 from contextlib import contextmanager
 import pickle
 
@@ -27,14 +28,16 @@ def _open_notebook_to_write ():
         This will load the notebook from the database, and if there's no db it'll make a notebook. 
     '''
     notebook = None
+    pathname = os.path.dirname(os.path.realpath(__file__)) 
+    filename = os.path.join(pathname, 'notebook.json')
     try:
-        with open('notebook.json', 'r+') as f:
+        with open(filename, 'r+') as f:
             notebook = pickle.load(f)
     except: 
         notebook = lib.notebook.Notebook()
 
     yield notebook
-    with open('notebook.json', 'w+') as f:
+    with open(filename, 'w+') as f:
         pickle.dump(notebook, f)
 def _get_file_text(filename):
     try:

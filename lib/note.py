@@ -37,6 +37,11 @@ class Note():
         all_text = self._add_text_to_children(self.child_notes, self.note, text_getter)
         return all_text
 
+    def copy_meta(note):
+        self.review_urgency = note.review_urgency
+        self.review_date = note.review_date
+        self.child_notes = note.child_notes
+
     def add_child(self, note):
         self.child_notes[note.db_id] = note
 

@@ -155,7 +155,8 @@ class Notebook():
     def _delete_or_make_id(self, note):
         if note.db_id in self.note_table.iterkeys():
             note.copy_meta(note_table[note.db_id])
-            self._remore_refs_from_parents(note)
+            self._remove_refs_from_parents(note)
+            db_id = note.db_id
         else:
             db_id = self.id_manager.get_id()
         return db_id
@@ -168,16 +169,30 @@ class Notebook():
         for target in old_notes:
             if target not in updated_note_ids:
                 self.delete_note(target)
+    def _see_if_note_is_changed_db_note(self, note):
+        if note.db_id in self.note_table.iterkeys():
+            orig_note = self.note_table(note.db_id)
+            is_identical = note.compare(orig_note)
+            return is_identical
+        else:
+            return False
     def _update_all_db_notes(self, updated_notes):
         found_note_ids = [0] 
+        altered_note_ids = [0] 
         for note in updated_notes:
-            if note.db_id not in found_note_ids:
-                found_note_ids += self._update_and_add_note(note)
+            if self._see_if_note_is_changed_db_note(note):
+                if note.db_id not in altered_note_ids:
+                    note_id = self._update_and_add_note(note)
+                    found_note_ids += note_id
+                    altered_note_ids += note_id
+            elif note.db_id not in found_note_ids:
+                if not note.db_id:
+                    note_id = self._update_and_add_note(note)
+                found_note_ids += note_id
         return found_note_ids
     def update_all_from_raw(self, raw_notebook):
-        updated_notes = self._split_notes_by_breaks(raw_notebook)
-        # don't wanna update the root note 0!
-        found_note_ids = self._update_all_db_notes(updated_notes)
+        new_notes_to_add = self._split_notes_by_breaks(raw_notebook)
+        found_note_ids = self._update_all_db_notes(new_notes_to_add)
         self._remove_unfound_notes(found_note_ids)
 
     def build_all_notes_text(self):

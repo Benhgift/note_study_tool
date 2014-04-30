@@ -17,7 +17,7 @@ class _IdManager():
         else:
             id_target = self.id_next
             self.id_next += 1
-            self.id_used.append(id_target)
+        self.id_used.append(id_target)
         return id_target
 
     def remove_id(self, id_target):

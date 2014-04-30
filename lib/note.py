@@ -37,6 +37,21 @@ class Note():
         all_text = self._add_text_to_children(self.child_notes, self.note, text_getter)
         return all_text
 
+    def _get_attributes(self, note):
+        return [
+            note.note,
+            note.parent_notes,
+            note.child_notes, 
+            note.review_urgency,
+            note.review_date]
+    def compare(self, orig_note):
+        my_attributes = self._get_attributes(self)
+        orig_attributes = self._get_attributes(orig_note)
+        for mine, orig in zip(my_attributes, orig_attributes):
+            if mine != orig:
+                return False
+        return True
+
     def copy_meta(note):
         self.review_urgency = note.review_urgency
         self.review_date = note.review_date

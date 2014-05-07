@@ -1,10 +1,11 @@
 # this is a notebook file that deals with notebooks (clusters of notes)
 from multiprocessing.connection import Listener
+from multiprocessing.connection import Client
+from collections import namedtuple
 from contextlib import contextmanager
 from lib._id_manager import _IdManager
 import lib.note
 import re
-import thread
 import os
 import pickle
 
@@ -234,21 +235,24 @@ class Notebook():
             print note.note
 
     def _start_listener(self, listener):
-        conn = listener.accept()
-        print 'connection accepted from', listener.last_accepted
         while True:
+            conn = listener.accept()
+            print 'connection accepted from', listener.last_accepted
             msg = conn.recv()
             # do something with msg
-            if msg.name == 'update_all_from_raw':
-                self.update_all_from_raw(msg.data)
-            if msg.name == 'build_all_notes_text':
+            if msg[0] == 'update_all_from_raw':
+                self.update_all_from_raw(msg[1])
+            if msg[0] == 'build_all_notes_text':
                 print self.build_all_notes_text()
-            if msg.name == 'close':
+            if msg[0] == 'close':
                 conn.close()
                 break
         listener.close()
 
-    def start_server(self):
+    def start_server(self, address, password):
+        print("server waiting")
         listener = Listener()
-        thread.start_new_thread(self._start_listener, listener)
+        client = Client(address)
+        client.send(listener.address)
+        self._start_listener(listener)
         return listener.address

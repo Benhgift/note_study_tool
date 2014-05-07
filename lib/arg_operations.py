@@ -1,6 +1,6 @@
 # this is the file dealing with all the arguments
 from lib import argparse as argy
-from lib.notebook import Notebook 
+from lib.notebook import Notebook
 from lib.notebook import open_notebook_to_write
 
 def get_args():
@@ -12,7 +12,7 @@ def get_args():
     parser.add_argument('-t', '--note_text', help='A new note')
     parser.add_argument('-m', '--make_all_text', help='Make the notes file with all notes in it', action='store_true')
     parser.add_argument('-s', '--study_one', action='store_true', help='Gives a note for review and marks it')
-    parser.add_argument('-S', '--server', action='store_true', help='Starts this as a server, pass in notes filename after that')
+    parser.add_argument('-S', '--server', nargs=2, help='Starts this as a server, pass in port and notes filename after that')
     parser.add_argument('-u','--update', help='Pass in the note to update')
 
     args = parser.parse_args()
@@ -41,7 +41,7 @@ def do_args(args):
             for x in notebook.build_all_notes_text():
                 print x
         if args.server:
-            return notebook.start_server()
+            print notebook.start_server(args.server[0], args.server[1])
         if args.replace_all:
             raw = _get_file_text(args.replace_all)
             notebook.update_all_from_raw(raw)

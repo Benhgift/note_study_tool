@@ -26,11 +26,13 @@ class Note():
         for child in child_notes.itervalues():
             text += func(child)
         return text
+
     def make_all_text(self):
         def text_getter(kid):
             return ["\t" + kidtext for kidtext in kid.make_all_text()]
         all_text = self._add_text_to_children(self.child_notes, self.note, text_getter)
         return all_text
+
     def make_all_text_minus_one_indent(self):
         def text_getter(kid):
             return kid.make_all_text()

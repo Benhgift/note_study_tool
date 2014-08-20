@@ -24,6 +24,7 @@ def _get_file_text(filename):
             return f.readlines()
     except:
         return []
+
 def do_args(args):
     with open_notebook_to_write() as notebook:
         if args.note:
@@ -49,12 +50,15 @@ def do_args(args):
 def _bad_formatting_error():
     print "BAD FORMATTING ON NOTE"
     raise NameError
+
 def _bad_key_error():
     print "BAD PARENT ID"
     raise NameError
+
 def _check_note(note, notebook):
     text = _get_file_text(note)
     _check_note_text(text, notebook)
+
 def _check_note_formatting(text):
     found_section_parents = False
     found_note_section = False
@@ -68,17 +72,21 @@ def _check_note_formatting(text):
             found_note_section = True
     if not all([found_section_parents, found_note_section, found_note_text]):
         _bad_formatting_error()
+
 def _check_valid_parents(parents, db):
     for parent in parents.iterkeys():
         if not parent in db.keys():
             _bad_key_error()
+
 def _check_valid_raw_parents(text, notebook):
     db = notebook.note_table
     parents = notebook._get_note_parents(text)
     _check_valid_parents(parents, db)
+
 def _check_note_text(text, notebook):
     _check_note_formatting(text)
     _check_valid_raw_parents(text, notebook)
+
 def check_args(args):
     with open_notebook_to_write() as notebook:
         if args.note:
